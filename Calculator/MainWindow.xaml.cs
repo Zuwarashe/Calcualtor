@@ -21,6 +21,9 @@ namespace Calculator
     public partial class MainWindow : Window
     {
         private string currentNumber = string.Empty;
+        private Boolean done = false;
+        private string numberone = string.Empty;
+        private string numbertwo = string.Empty;
         private string operation = string.Empty;
         private double result = 0;
 
@@ -41,21 +44,32 @@ namespace Calculator
             }
             else if (content == "+" || content == "/" || content == "*" || content == "-")
             {
+                operation = content;
+                numberone = currentNumber;
+                resultTextBox.Text += content;
+                currentNumber = string.Empty;
+                //  MessageBox.Show(currentNumber + " cur num " + content);
+            }
+            else if (content == "=")
+            { 
                 
+               
                 double newNumber;
                 if ((double.TryParse(currentNumber, out newNumber)))
                 {
-                  //  MessageBox.Show(currentNumber);
+                    double NumberOne;
+                    double.TryParse(numberone, out NumberOne);
+
                     switch (operation)
                     {
                         case "+":
-                            result = double.Parse(currentNumber) + newNumber;
+                            result =  NumberOne + newNumber;
                             break;
                         case "-":
-                            result -= newNumber;
+                            result = newNumber - NumberOne;
                             break;
                         case "*":
-                            result *= newNumber;
+                            result *= NumberOne * newNumber;
                             break;
                         case "/":
                             if (newNumber != 0)
@@ -66,10 +80,19 @@ namespace Calculator
                     }                  
                     resultTextBox.Text = result.ToString();
                     currentNumber = result.ToString();
+                    done = true;
                 }
             }
             else
             {
+                if (done)
+                {
+                    resultTextBox.Text = string.Empty;
+                    currentNumber = string.Empty;
+                    result = 0;
+                    operation = string.Empty;
+                    done = false;
+                }
                 currentNumber += content;
                 resultTextBox.Text += content;
              //   resultTextBox.Text = result.ToString();
